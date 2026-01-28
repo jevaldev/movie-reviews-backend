@@ -21,10 +21,24 @@ export class MoviesController {
     try {
       const { id } = req.params
 
-      const movie = this.MoviesModel.getMovieByID({ id: Number(id) })
+      const movie = await this.MoviesModel.getMovieByID({ id: Number(id) })
+
       res.json({ status: 'ok', data: movie })
     } catch (error) {
       console.log(error)
+      next(error)
+    }
+  }
+
+  getFilteredMovies = async (req, res, next) => {
+    try {
+      const { title, author } = req.query
+      console.log(title, author)
+
+      const movies = await this.MoviesModel.getFilteredMovies({ title: title || undefined, author: author || undefined })
+      console.log(movies)
+      res.json({ status: 'ok', data: movies })
+    } catch (error) {
       next(error)
     }
   }
